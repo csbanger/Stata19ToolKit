@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stata-19 Toolkit &mdash; Stata help for statistics beginners</title>
+  <meta name="description" content="A plain-English reference for students taking Stata-19: a searchable Stata command dictionary, a step-by-step beginner guide, and a help centre for common errors.">
+  <meta name="theme-color" content="#0b2447">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Applies the saved light/dark choice before the page paints, so there
+       is no flash of the wrong theme. Keep this in the <head> of every page. -->
+  <script>
+    (function () {
+      try {
+        var saved = window.localStorage.getItem("s19-theme");
+        if (saved === "dark" || saved === "light") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (error) {
+        /* Storage can be blocked; the system preference still applies. */
+      }
+    }());
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ Site header (identical on every page) ============ -->
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" rx="8" fill="#0b2447"></rect>
+          <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+          <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+          <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+        </svg>
+        <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="index.html">Home</a></li>
+          <li><a class="nav-link" href="commands.html">Command Dictionary</a></li>
+          <li><a class="nav-link" href="guide.html">Beginner Guide</a></li>
+          <li><a class="nav-link" href="help.html">Help Centre</a></li>
+          <li><a class="nav-link" href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <path d="M12 2.6v2.3M12 19.1v2.3M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.6 12h2.3M19.1 12h2.3M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8Z"></path>
+          </svg>
+        </button>
+
+        <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Hero ============ -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+          <span class="eyebrow">Stata support for Stata-19</span>
+          <h1>Stop fighting the software. Get back to the statistics.</h1>
+          <p class="hero-lede">
+            Stata-19 asks you to learn statistics and a command-line statistics package at the
+            same time. This site takes the software half off your plate: look up the command you
+            need, follow a guided first session, and decode the error messages that stop you cold.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-accent" href="commands.html">
+              Find a command
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"></path>
+              </svg>
+            </a>
+            <a class="btn btn-ghost" href="guide.html">Start the beginner guide</a>
+          </div>
+
+          <ul class="stat-strip">
+            <li>
+              <span class="stat-value">51</span>
+              <span class="stat-label">commands explained in plain English</span>
+            </li>
+            <li>
+              <span class="stat-value">7 lessons</span>
+              <span class="stat-label">from opening Stata to explaining your results</span>
+            </li>
+            <li>
+              <span class="stat-value">Free</span>
+              <span class="stat-label">no account, no tracking, no cost</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Three main sections ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Where to start</span>
+          <h2>Three ways in, depending on where you are stuck</h2>
+          <p class="lede">
+            Most Stata-19 problems are one of three things: you do not know the command, you do
+            not know the workflow, or Stata has just thrown an error at you. Pick the one that
+            matches.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <article class="card card--linked">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m16.5 16.5 4.5 4.5"></path>
+              </svg>
+            </div>
+            <p class="card-step">For when you know what you want</p>
+            <h3>Command Dictionary</h3>
+            <p>
+              A searchable list of the Stata commands an introductory course actually uses. Open
+              any one for the syntax, the options worth knowing, the mistakes beginners make, and
+              a worked example that runs on the dataset built into Stata.
+            </p>
+            <a class="card-link" href="commands.html">Search the commands</a>
+          </article>
+
+          <article class="card card--linked">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H5.5A1.5 1.5 0 0 1 4 16.5Z"></path>
+                <path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H14a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h4.5a1.5 1.5 0 0 0 1.5-1.5Z"></path>
+              </svg>
+            </div>
+            <p class="card-step">For your very first session</p>
+            <h3>Beginner Guide</h3>
+            <p>
+              A seven-lesson course for a complete beginner: the four Stata windows, loading
+              a dataset, <code>summarize</code>, your first graph, a t-test, and how to say what
+              the output means &mdash; all written in do-files from Lesson 1.
+            </p>
+            <a class="card-link" href="guide.html">Open the guide</a>
+          </article>
+
+          <article class="card card--linked">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M12 3.2 20.2 7v5.4c0 4.3-3.3 7.3-8.2 8.4-4.9-1.1-8.2-4.1-8.2-8.4V7Z"></path>
+                <path d="M12 8.6v4.2M12 16.1h.01"></path>
+              </svg>
+            </div>
+            <p class="card-step">For when something breaks</p>
+            <h3>Help Centre</h3>
+            <p>
+              Searchable from one box: frequently asked questions, Stata&rsquo;s error codes in
+              plain English, a helper that asks a few questions and names the right test, and a
+              glossary of the statistics words your lectures assume you know.
+            </p>
+            <a class="card-link" href="help.html">Troubleshoot an error</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Who this is for ============ -->
+    <section class="section section--surface">
+      <div class="container">
+        <div class="split">
+          <div>
+            <span class="eyebrow">Who this is for</span>
+            <h2>Written for the person who has never typed a command before</h2>
+            <p>
+              If you have only ever used Excel, Stata feels unfriendly. There is a blinking cursor,
+              no obvious buttons, and error messages written for people who already know what they
+              mean. None of that means you are bad at statistics.
+            </p>
+            <ul class="tick-list">
+              <li>Every example uses a dataset that ships with Stata, so you can run it right now.</li>
+              <li>No jargon without a definition, and no assumed knowledge of the command line.</li>
+              <li>Explanations stay short. If you want the full reference, Stata&rsquo;s own <code>help</code> is better.</li>
+              <li>Copy buttons on every code block, because typos are the number one cause of errors.</li>
+            </ul>
+          </div>
+
+          <aside class="panel">
+            <div class="panel-head">
+              <span class="panel-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+              <h3>Try this right now</h3>
+            </div>
+            <p>
+              Open Stata, click into the Command window and type these two lines. The first loads a
+              dataset that came with your copy of Stata; the second summarises it.
+            </p>
+            <pre class="code"><code>sysuse auto, clear
+summarize price mpg</code></pre>
+            <p class="muted">
+              If that produced a table of numbers, you have just run your first Stata analysis.
+              The <a href="guide.html">Beginner Guide</a> explains every part of it.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ How a session fits together ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head section-head--center">
+          <span class="eyebrow">The shape of a session</span>
+          <h2>Four moves, every single time</h2>
+          <p class="lede">
+            Nearly every piece of Stata coursework is the same four steps in the same order. Once
+            that is familiar, the only thing that changes between assignments is the middle.
+          </p>
+        </div>
+
+        <div class="card-grid card-grid--compact">
+          <article class="card">
+            <p class="card-step">Step one</p>
+            <h3>Point Stata at your folder</h3>
+            <p><code>cd</code> once at the top, and every file afterwards can be named on its own.</p>
+          </article>
+
+          <article class="card">
+            <p class="card-step">Step two</p>
+            <h3>Load and look</h3>
+            <p><code>use</code> or <code>import</code>, then <code>describe</code> before you analyse anything.</p>
+          </article>
+
+          <article class="card">
+            <p class="card-step">Step three</p>
+            <h3>Summarise, then test</h3>
+            <p><code>summarize</code> and <code>tabulate</code> first; the model comes after you know the data.</p>
+          </article>
+
+          <article class="card">
+            <p class="card-step">Step four</p>
+            <h3>Save the evidence</h3>
+            <p><code>graph export</code> and a <code>log</code> file, so your report writes itself.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Closing call to action ============ -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="cta">
+          <span class="eyebrow" style="color: var(--accent);">Why this exists</span>
+          <h2>Built by a student who found the first few weeks hard</h2>
+          <p>
+            This is not an official course resource and it is not run by a company. It is the
+            reference I wish I had in week one of Stata-19.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-accent" href="about.html">Read the full story</a>
+            <a class="btn btn-ghost" href="guide.html">Start the guide instead</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Site footer (identical on every page) ============ -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <rect width="32" height="32" rx="8" fill="#122a47"></rect>
+            <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+            <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+            <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+          </svg>
+          <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+        </a>
+        <p>
+          A plain-English Stata reference for students taking introductory statistics. Free,
+          static, and open to anyone who needs it.
+        </p>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2>Sections</h2>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="commands.html">Command Dictionary</a></li>
+          <li><a href="guide.html">Beginner Guide</a></li>
+          <li><a href="help.html">Help Centre</a></li>
+          <li><a href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2>Good to know</h2>
+        <p>
+          Not affiliated with StataCorp or with any university. Stata is a registered trademark of
+          StataCorp LLC.
+        </p>
+        <p>
+          Where this site and your course materials disagree, your course materials win. Always
+          check the syntax for your own version of Stata with <code>help</code>.
+        </p>
+      </div>
+    </div>
+
+    <div class="container footer-base">
+      <p>&copy; <span data-year>2026</span> Stata-19 Toolkit. Built as a student project.</p>
+      <p>Made with plain HTML, CSS and JavaScript.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

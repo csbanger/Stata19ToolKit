@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Help Centre &mdash; Stata-19 Toolkit</title>
+  <meta name="description" content="Searchable Stata help: frequently asked questions, error codes like r(111) in plain English, a helper that picks the right test for your data, and a glossary of statistics terms.">
+  <meta name="theme-color" content="#0b2447">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Applies the saved light/dark choice before the page paints, so there
+       is no flash of the wrong theme. Keep this in the <head> of every page. -->
+  <script>
+    (function () {
+      try {
+        var saved = window.localStorage.getItem("s19-theme");
+        if (saved === "dark" || saved === "light") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (error) {
+        /* Storage can be blocked; the system preference still applies. */
+      }
+    }());
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ Site header (identical on every page) ============ -->
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" rx="8" fill="#0b2447"></rect>
+          <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+          <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+          <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+        </svg>
+        <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="index.html">Home</a></li>
+          <li><a class="nav-link" href="commands.html">Command Dictionary</a></li>
+          <li><a class="nav-link" href="guide.html">Beginner Guide</a></li>
+          <li><a class="nav-link" href="help.html">Help Centre</a></li>
+          <li><a class="nav-link" href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <path d="M12 2.6v2.3M12 19.1v2.3M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.6 12h2.3M19.1 12h2.3M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8Z"></path>
+          </svg>
+        </button>
+
+        <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Page header ============ -->
+    <div class="page-head">
+      <div class="container">
+        <span class="eyebrow">Troubleshooting</span>
+        <h1>Help Centre</h1>
+        <p class="lede">
+          Stata&rsquo;s error messages are short, blunt and written for people who already know
+          what they mean. This page translates the common ones, answers the questions that come up
+          every year, helps you pick the right test, and explains the words your lectures assume
+          you know. One search box covers the lot.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============ One search box for the whole page ============ -->
+    <div class="toolbar">
+      <div class="container">
+        <div class="search-field">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+          </svg>
+          <label class="sr-only" for="help-search">Search the Help Centre</label>
+          <input
+            class="search-input"
+            id="help-search"
+            type="search"
+            autocomplete="off"
+            placeholder="Search this page, e.g. r(111), log file, p-value, graph">
+        </div>
+
+        <div class="chips help-jump">
+          <span class="chips-label">Jump to</span>
+          <a class="chip" href="#faq">FAQs</a>
+          <a class="chip" href="#errors">Common errors</a>
+          <a class="chip" href="#chooser">Which test?</a>
+          <a class="chip" href="#glossary">Glossary</a>
+          <a class="chip" href="#checklist">Checklist</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <p class="result-count" id="help-count" role="status" aria-live="polite" hidden></p>
+
+      <div class="empty-state" id="help-empty" hidden>
+        <h2>Nothing on this page matches that</h2>
+        <p>
+          Try a shorter word, or the error code on its own. If you are looking for a command
+          rather than a problem, the <a href="commands.html">Command Dictionary</a> searches
+          fifty-one of them.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============ FAQs ============ -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Frequently asked</span>
+          <h2>Questions beginners actually ask</h2>
+          <p class="lede">Click a question to open the answer.</p>
+        </div>
+
+        <div class="accordion">
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-1">
+              <span>Do I have to buy Stata myself?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-1" hidden>
+              <p>
+                Usually not. Most universities provide Stata on lab machines, through a virtual
+                desktop, or under a student licence you can install at home &mdash; check your
+                department&rsquo;s IT pages before paying for anything. If you do buy a licence,
+                StataCorp sells reduced-price student versions, but the lab copy is free and is the
+                version your coursework was written against.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-2">
+              <span>Should I type commands into the Command window or a do-file?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-2" hidden>
+              <p>
+                Both, for different purposes. Use the Command window to experiment and to try a
+                line you are unsure about. Once a line works, paste it into a do-file.
+              </p>
+              <p>
+                The do-file is the thing you keep: it lets you rerun the whole analysis after you
+                find a mistake, which you will. <a href="guide.html#lesson-1">Lesson 1 of the
+                beginner guide</a> builds one from scratch, and the rest of the course works that
+                way throughout.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-3">
+              <span>Why does Stata refuse to load my next dataset?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-3" hidden>
+              <p>
+                Because you have unsaved changes in memory and Stata will not quietly throw them
+                away. The message is <code>no; dataset in memory has changed since last saved</code>.
+              </p>
+              <p>
+                If you do not need those changes, add <code>clear</code> to the command:
+                <code>use "wave2.dta", clear</code>. If you do need them, run
+                <code>save "working.dta", replace</code> first.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-4">
+              <span>What does a dot in my data mean?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-4" hidden>
+              <p>
+                A full stop is Stata&rsquo;s symbol for a missing value. It is not zero, and it is
+                not an error.
+              </p>
+              <p>
+                Two consequences worth knowing. First, commands quietly skip missing values, so
+                your <strong>Obs</strong> count can be lower than your number of rows. Second, in
+                a comparison Stata treats missing as larger than any number, so
+                <code>drop if price > 10000</code> also drops the missing ones. Write
+                <code>drop if price > 10000 &amp; !missing(price)</code> when that matters.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-5">
+              <span>Why is one of my variables red in the Data Editor?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-5" hidden>
+              <p>
+                Red means Stata has stored it as text rather than as a number, which is very common
+                after importing a spreadsheet containing a currency symbol, a comma or a stray
+                space.
+              </p>
+              <p>
+                If the column really is numbers, convert it with
+                <code>destring income, replace ignore("$,")</code>. If it is genuinely a category
+                such as a region name, convert it with
+                <code>encode region, generate(region_num)</code> so statistical commands will
+                accept it.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-6">
+              <span>Does capitalisation matter?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-6" hidden>
+              <p>
+                Yes, and it catches everyone. Stata is case-sensitive: <code>Summarize</code> is
+                not a command, and if your variable is called <code>Price</code> then
+                <code>price</code> will not be found.
+              </p>
+              <p>
+                The easy habit is to keep everything lowercase. <code>rename Price price</code>
+                fixes an imported column, and clicking a name in the Variables window inserts it
+                with the right spelling.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-7">
+              <span>Can I undo something in Stata?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-7" hidden>
+              <p>
+                There is no undo button for data changes. If you have just dropped the wrong rows,
+                reload the data from the file and run your do-file again &mdash; which is the real
+                reason do-files matter.
+              </p>
+              <p>
+                To try something risky deliberately, wrap it: <code>preserve</code> takes a
+                snapshot, and <code>restore</code> puts your data back exactly as it was.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-8">
+              <span>How do I get my results into Word?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-8" hidden>
+              <p>
+                For tables, select the output in the Results window, right-click and choose to copy
+                it as a table or as plain text, then paste it into Word. Pasted plain text needs a
+                monospaced font such as Consolas to keep its columns lined up.
+              </p>
+              <p>
+                For graphs, do not screenshot. Use
+                <code>graph export "figure1.png", width(1200) replace</code> and insert the file.
+              </p>
+              <p>
+                If your course wants a transcript of everything, wrap your session in
+                <code>log using "session.log", replace</code> and <code>log close</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-9">
+              <span>Where did my graph or exported file go?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-9" hidden>
+              <p>
+                Into Stata&rsquo;s working folder, which is not necessarily the folder you think
+                you are in. Run <code>pwd</code> to see where that is, and
+                <code>cd "C:/your/course/folder"</code> at the start of every session to make it
+                somewhere you will look.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-10">
+              <span>My numbers do not match the lecturer&rsquo;s. What went wrong?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-10" hidden>
+              <p>Work through these in order, because it is almost always one of them:</p>
+              <ul>
+                <li>You are using a different number of observations &mdash; compare the <strong>Obs</strong> column, and check for missing values.</li>
+                <li>An <code>if</code> condition or a <code>drop</code> from earlier in your session is still in effect.</li>
+                <li>You cleaned or recoded a variable and they did not, or the other way round.</li>
+                <li>An option differs: <code>summarize</code> and <code>summarize, detail</code> report different things.</li>
+              </ul>
+              <p>
+                Running your analysis from a do-file after <code>clear all</code> rules out most of
+                this in one go.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-11">
+              <span>How do I know which statistical test to use?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-11" hidden>
+              <p>
+                The reasoning belongs to your course: the right test depends on your research
+                question, your variable types and the assumptions you are willing to make, and
+                that thinking is what your module is teaching and assessing.
+              </p>
+              <p>
+                What this site can do is turn a decision you have already made into a command.
+                <a href="#chooser">Which test should I use?</a> below asks you two or three
+                questions about your data and names the Stata command that fits, with a line you
+                can copy. Treat its answer as a starting point to check against your lecture
+                notes, never as the final word.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-12">
+              <span>Is using this site allowed?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-12" hidden>
+              <p>
+                Looking up how a command works is no different from reading Stata&rsquo;s own
+                documentation, and the examples here use Stata&rsquo;s practice datasets, not your
+                assignment data.
+              </p>
+              <p>
+                What has to be yours is the analysis and the interpretation. Your module&rsquo;s
+                academic integrity rules are the authority on what counts as acceptable help, so
+                check them if you are unsure.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-13">
+              <span>What is a log file, and why would I want one?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-13" hidden>
+              <p>
+                A log file is a recording of your session: every command you ran and everything
+                Stata printed back, written to a file as it happens. The do-file is the questions;
+                the log is the answers.
+              </p>
+              <p>
+                It is worth the one line it costs. You keep a record of the numbers you actually
+                saw on the day, you can scroll back through output that has long since gone from
+                the Results window, and some courses ask you to submit one as evidence of your
+                work.
+              </p>
+              <p>Open it at the top of your do-file and close it at the bottom:</p>
+              <pre class="code"><code>log using "week3.log", replace
+
+sysuse auto, clear
+summarize price
+
+log close</code></pre>
+              <p>
+                <code>replace</code> overwrites yesterday&rsquo;s log rather than refusing to
+                start. Add <code>, text</code> for a plain file that anything can open, or use a
+                <code>.smcl</code> name to keep Stata&rsquo;s own formatting.
+                <a href="commands.html?q=log">See <code>log</code> in the dictionary</a>.
+              </p>
+              <p class="muted">
+                Got <code>log file already open</code>? An earlier run never reached its
+                <code>log close</code>. Run <code>log close</code> on its own, then start again.
+              </p>
+            </div>
+          </div>
+
+          <div class="acc-item">
+            <h3><button class="acc-trigger" type="button" aria-expanded="false" aria-controls="faq-14">
+              <span>How do I save a graph so I can put it in my report?</span>
+              <span class="acc-icon" aria-hidden="true"></span>
+            </button></h3>
+            <div class="acc-panel" id="faq-14" hidden>
+              <p>
+                Draw the graph, then export it on the very next line. Each new graph replaces
+                whatever is in the Graph window, so exporting straight away is the habit that
+                saves you redrawing things later.
+              </p>
+              <pre class="code"><code>sysuse auto, clear
+
+histogram mpg, frequency
+graph export "figure1.png", width(1200) replace</code></pre>
+              <p>
+                <code>width(1200)</code> gives you something that still looks sharp in Word, and
+                <code>replace</code> lets you rerun the do-file without an error. For a document
+                you will print, a <code>.pdf</code> name keeps the lines crisp at any size;
+                <code>.png</code> is the safe choice everywhere else.
+              </p>
+              <p>
+                The file lands in Stata&rsquo;s working folder, which <code>pwd</code> will show
+                you. From there it is an ordinary image: drag it into Word, or use Insert &rarr;
+                Pictures. <a href="commands.html?q=graph+export">See <code>graph export</code> in
+                the dictionary</a>.
+              </p>
+              <p class="muted">
+                Right-clicking the Graph window and copying works for a quick look, but it copies
+                at screen resolution and tends to come out blurry once printed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Error messages ============ -->
+    <section class="section section--surface" id="errors">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Error messages</span>
+          <h2>What Stata is actually telling you</h2>
+          <p class="lede">
+            Stata ends a failed command with a short message and a code in brackets, such as
+            <code>r(111)</code>. The code is just a label for the type of problem. These are the
+            ones you will meet in your first term.
+          </p>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data">
+            <caption>Scroll sideways on a narrow screen to see the fix column.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Message</th>
+                <th scope="col">What it means</th>
+                <th scope="col">What to do</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><code>variable price not found</code><br><span class="muted">r(111)</span></th>
+                <td>Stata cannot see a variable by that name in the data currently in memory.</td>
+                <td>Check you have loaded the data (<code>describe</code>), check the spelling, and check the capitalisation. <code>lookfor pri</code> finds variables whose names contain &ldquo;pri&rdquo;.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>no observations</code><br><span class="muted">r(2000)</span></th>
+                <td>The command ran, but your <code>if</code> condition matched no rows at all.</td>
+                <td>Test the condition on its own with <code>count if foreign == 1</code>. A common cause is comparing against a value label (<code>if foreign == "Foreign"</code>) rather than the number underneath it.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>varlist required</code><br><span class="muted">r(100)</span></th>
+                <td>The command needs you to name at least one variable, and you gave it none.</td>
+                <td>Add the variables: <code>summarize price mpg</code> rather than bare <code>summarize</code> where a list is required.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>invalid syntax</code><br><span class="muted">r(198)</span></th>
+                <td>Stata got as far as reading your command and then could not make sense of the rest of the line.</td>
+                <td>Check the comma before your options, check for unclosed brackets or quotation marks, and compare your line with the syntax diagram in <code>help <em>command</em></code>.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>file mydata.dta not found</code><br><span class="muted">r(601)</span></th>
+                <td>Stata looked in its working folder and the file was not there.</td>
+                <td>Run <code>pwd</code> to see where it looked, then <code>cd</code> into the right folder &mdash; or give the full path in quotation marks. Check the extension too.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>no; dataset in memory has changed since last saved</code><br><span class="muted">r(4)</span></th>
+                <td>You asked Stata to replace the data in memory, and it is protecting unsaved changes.</td>
+                <td>Add <code>clear</code> to the command if you do not need those changes, or <code>save</code> first if you do.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>price already defined</code><br><span class="muted">r(110)</span></th>
+                <td>You used <code>generate</code> for a variable that already exists.</td>
+                <td>Use <code>replace</code> to change an existing variable, or pick a new name. Stata separates the two on purpose so you cannot overwrite a column by accident.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>type mismatch</code><br><span class="muted">r(109)</span></th>
+                <td>You compared or combined text with a number.</td>
+                <td>Quote text values (<code>if make == "Honda"</code>), and convert text that should be numeric with <code>destring</code>. <code>describe</code> shows which variables are <code>str</code>.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>string variables not allowed</code></th>
+                <td>A statistical command was handed a text variable it cannot work with.</td>
+                <td><code>encode region, generate(region_num)</code> turns categories into numbers with labels; <code>destring</code> handles numbers stored as text.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>unrecognized command</code><br><span class="muted">r(199)</span></th>
+                <td>Stata has never heard of the first word on your line.</td>
+                <td>Nearly always a typo &mdash; <code>sumarize</code>, <code>regres</code>. If the command is one your course downloaded, install it with <code>ssc install <em>name</em></code>.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>too many variables specified</code><br><span class="muted">r(103)</span></th>
+                <td>The command accepts fewer variables than you gave it.</td>
+                <td>Check the syntax diagram in <code>help</code>. For example <code>histogram</code> takes exactly one variable, so plot them one at a time.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>--more--</code> at the bottom of the screen</th>
+                <td>Not an error. Older versions of Stata pause when output fills the window.</td>
+                <td>Press the spacebar to continue, or run <code>set more off</code> once so it never pauses again.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout" style="margin-top: 1.5rem;">
+          <p class="callout-title">Reading any error, not just these</p>
+          <p>
+            Stata tells you where it stopped as well as why. The <code>r(111)</code> at the end of
+            an error is a clickable link in the Results window: click it for the official
+            explanation of that return code. And in a do-file, the command printed immediately
+            above the error is the one that failed.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Which test should I use? ============ -->
+    <section class="section" id="chooser" data-search-skip>
+      <div class="container container--narrow">
+        <div class="section-head">
+          <span class="eyebrow">Decision helper</span>
+          <h2>Which test should I use?</h2>
+          <p class="lede">
+            Answer two or three questions about your data and this will name the Stata command
+            that fits, with a line you can copy. It gets you to the right command; whether that
+            test is right for your question is still your course&rsquo;s call.
+          </p>
+        </div>
+
+        <div class="chooser" id="chooser-app">
+          <!-- Everything inside here is replaced by js/help.js. What is written
+               below is the fallback for a reader with JavaScript switched off,
+               and it says the same things the interactive version does. -->
+          <div class="chooser-static">
+            <h3>The short version</h3>
+            <dl class="gloss">
+              <div class="gloss-item">
+                <dt>One group, is the average different from a set number?</dt>
+                <dd><a href="commands.html?q=ttest"><code>ttest</code></a> &mdash; a one-sample t-test, e.g. <code>ttest score == 50</code>.</dd>
+              </div>
+              <div class="gloss-item">
+                <dt>Two separate groups, is the average different?</dt>
+                <dd><a href="commands.html?q=ttest"><code>ttest</code></a> with <code>by()</code>, e.g. <code>ttest price, by(foreign)</code>. If the numbers are badly skewed, <a href="commands.html?q=ranksum"><code>ranksum</code></a> instead.</dd>
+              </div>
+              <div class="gloss-item">
+                <dt>The same people measured twice</dt>
+                <dd><a href="commands.html?q=ttest"><code>ttest</code></a> comparing the two columns, e.g. <code>ttest before == after</code>.</dd>
+              </div>
+              <div class="gloss-item">
+                <dt>Three or more groups</dt>
+                <dd><a href="commands.html?q=oneway"><code>oneway</code></a> for one grouping variable, <a href="commands.html?q=anova"><code>anova</code></a> when you have more than one.</dd>
+              </div>
+              <div class="gloss-item">
+                <dt>Two numbers, do they move together?</dt>
+                <dd><a href="commands.html?q=correlate"><code>correlate</code></a> to describe the link, <a href="commands.html?q=regress"><code>regress</code></a> to predict one from the other.</dd>
+              </div>
+              <div class="gloss-item">
+                <dt>Two categories, are they related?</dt>
+                <dd><a href="commands.html?q=chi2"><code>tabulate ..., chi2</code></a>, e.g. <code>tabulate foreign rep78, chi2</code>.</dd>
+              </div>
+              <div class="gloss-item">
+                <dt>A proportion, against a value or between two groups</dt>
+                <dd><a href="commands.html?q=prtest"><code>prtest</code></a>, e.g. <code>prtest foreign == 0.3</code>.</dd>
+              </div>
+              <div class="gloss-item">
+                <dt>Predicting a yes/no outcome</dt>
+                <dd><a href="commands.html?q=logit"><code>logit</code></a>, e.g. <code>logit foreign mpg weight</code>.</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <div class="callout callout--warn">
+          <p class="callout-title">Read this before you quote it</p>
+          <p>
+            Every test carries assumptions &mdash; roughly normal data, similar spread between
+            groups, independent observations &mdash; and this helper cannot check any of them
+            against your dataset. It narrows twenty commands down to one. Your lecture notes
+            decide whether that one is defensible.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Glossary ============ -->
+    <section class="section section--surface" id="glossary">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Glossary</span>
+          <h2>The words, in plain English</h2>
+          <p class="lede">
+            Short working definitions for the terms that turn up in Stata output and in your
+            lectures. They are deliberately informal; where your course defines something more
+            precisely, your course wins.
+          </p>
+        </div>
+
+        <dl class="gloss">
+          <div class="gloss-item">
+            <dt>Observation</dt>
+            <dd>
+              One row of your data: one person, one car, one country, one year. Stata calls the
+              count of them <code>N</code> or <code>Obs</code>.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Variable</dt>
+            <dd>
+              One column: one thing measured about every row, such as price or age.
+              <a href="commands.html?q=describe"><code>describe</code></a> lists the ones you have.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Categorical and continuous</dt>
+            <dd>
+              A categorical variable puts each row in a group (pass or fail, north or south). A
+              continuous one measures an amount that could in principle take any value in a range
+              (price, height). Which one you have decides which commands and graphs make sense.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Sample and population</dt>
+            <dd>
+              The population is everyone you want to say something about; the sample is the part
+              of it you actually measured. Statistics is the business of saying something about
+              the first using only the second &mdash; which is why almost every answer comes with
+              an admission of uncertainty attached.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Mean</dt>
+            <dd>
+              The ordinary average: add everything up and divide by how many. Sensitive to
+              extreme values, so one millionaire drags the mean income of a village upwards.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Median</dt>
+            <dd>
+              The middle value when you line everything up in order. Half the rows are above it,
+              half below. Unbothered by extremes, which is why it is the better summary of
+              skewed things like income or house prices.
+              <a href="commands.html?q=summarize"><code>summarize, detail</code></a> shows it.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Standard deviation</dt>
+            <dd>
+              How spread out the values are, in the same units as the data. Small means everyone
+              is bunched near the average; large means they are scattered. Two groups can share a
+              mean and look nothing alike.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Standard error</dt>
+            <dd>
+              Not the spread of your data but the wobble in your estimate: how much the mean
+              would jump around if you took your sample again. Bigger samples give smaller
+              standard errors, which is the whole argument for collecting more data.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Normal distribution</dt>
+            <dd>
+              The symmetrical bell-shaped curve. Lots of tests assume your data is roughly this
+              shape. &ldquo;Roughly&rdquo; is doing real work there &mdash; a histogram is usually
+              enough to tell whether you are anywhere near it.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Skew</dt>
+            <dd>
+              A distribution with a long tail on one side. Right-skewed (the common case) means a
+              few very large values stretch the top end, which is what you are seeing whenever
+              the mean sits well above the median.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Outlier</dt>
+            <dd>
+              A value far away from the rest. Sometimes a real and interesting case, sometimes a
+              typo with two extra zeros. Look at the Min and Max in
+              <a href="commands.html?q=summarize"><code>summarize</code></a> before you believe any
+              result.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Missing value</dt>
+            <dd>
+              A gap where no value was recorded, shown as a full stop. Stata leaves those rows out
+              of any calculation involving that variable, which is why your Obs count can shrink
+              without warning. <a href="commands.html?q=misstable"><code>misstable summarize</code></a>
+              finds them.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Null hypothesis</dt>
+            <dd>
+              The boring explanation that your test is trying to rule out: there is no difference,
+              no effect, no relationship. Tests are built to see whether your data is awkward
+              enough to make that story hard to believe.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Alternative hypothesis</dt>
+            <dd>
+              The claim you are entertaining instead: there is a difference. Two-sided means you
+              would accept a difference in either direction, and it is what Stata reports by
+              default on the <code>Ha: diff != 0</code> line.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>p-value</dt>
+            <dd>
+              The chance of seeing a result at least this striking if the null hypothesis were
+              true. Small means your data would be surprising in a world with no real effect.
+              It is <em>not</em> the probability that your hypothesis is correct, and nothing in
+              the number tells you the effect is large or important.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Significance level (alpha)</dt>
+            <dd>
+              The threshold you agree on before looking, almost always 0.05. A p-value below it
+              gets called statistically significant. The line is a convention, not a law of
+              nature: 0.049 and 0.051 are practically the same result.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Statistically significant</dt>
+            <dd>
+              Means only &ldquo;unlikely to be chance alone&rdquo;. It does not mean large,
+              important, or useful. A tiny, meaningless difference becomes significant in a big
+              enough sample.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Confidence interval</dt>
+            <dd>
+              A range of plausible values for the thing you are estimating, usually at 95%. Read
+              it as the honest version of your answer: not &ldquo;the difference is $312&rdquo;
+              but &ldquo;somewhere between &minus;$1,500 and $2,100&rdquo;. A wide interval that
+              straddles zero is telling you the same thing a large p-value is.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Degrees of freedom</dt>
+            <dd>
+              Roughly, how much independent information you have left after estimating things,
+              often your sample size minus one. You rarely have to calculate it &mdash; Stata
+              prints it, and it mostly matters because it shapes the test's comparison curve.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Correlation</dt>
+            <dd>
+              A number from &minus;1 to 1 saying how tightly two variables move together.
+              Positive: both rise together. Negative: one rises as the other falls. Zero: no
+              straight-line relationship &mdash; which is not the same as no relationship.
+              <a href="commands.html?q=correlate"><code>correlate</code></a> computes it.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Coefficient</dt>
+            <dd>
+              In a regression, the number attached to a variable: how much the outcome changes
+              when that variable goes up by one, holding the others fixed. Quote it in real units
+              (&ldquo;about $239 lower per mile per gallon&rdquo;), not as a bare number.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>R-squared</dt>
+            <dd>
+              The share of the variation in your outcome that the model accounts for, from 0 to 1.
+              Useful as a rough sense of fit. A low R-squared is not automatically a bad model,
+              and a high one is not proof of anything.
+            </dd>
+          </div>
+
+          <div class="gloss-item">
+            <dt>Association and causation</dt>
+            <dd>
+              Association means two things move together. Causation means one makes the other
+              happen. Observational data can show the first and almost never proves the second,
+              so write &ldquo;is associated with&rdquo; unless your design genuinely earns
+              stronger language.
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ Checklist ============ -->
+    <section class="section" id="checklist" data-search-skip>
+      <div class="container container--narrow">
+        <div class="section-head">
+          <span class="eyebrow">When nothing works</span>
+          <h2>The ten-minute checklist</h2>
+          <p class="lede">
+            Before you email a tutor or start again from scratch, go down this list. It resolves
+            the large majority of beginner problems.
+          </p>
+        </div>
+
+        <ol class="checklist">
+          <li>
+            <strong>Is there any data loaded?</strong>
+            Run <code>describe</code>. If it reports no variables, every other error is a
+            consequence of that. Load your data first.
+          </li>
+          <li>
+            <strong>Are you in the right folder?</strong>
+            Run <code>pwd</code>. If it is not your course folder, <code>cd</code> there before
+            doing anything else.
+          </li>
+          <li>
+            <strong>Is the variable name exactly right?</strong>
+            Stata is case-sensitive and will not guess. Click the name in the Variables window
+            instead of typing it, or find it with <code>lookfor</code>.
+          </li>
+          <li>
+            <strong>Did you use two equals signs in your condition?</strong>
+            <code>if price == 5000</code> compares; <code>if price = 5000</code> is an error.
+          </li>
+          <li>
+            <strong>Does the condition match anything?</strong>
+            <code>count if <em>your condition</em></code> will tell you. Zero explains a great many
+            strange results.
+          </li>
+          <li>
+            <strong>Is the Data Editor still open?</strong>
+            With your data open for editing, Stata can refuse to run anything else. Close that
+            window and try again.
+          </li>
+          <li>
+            <strong>Is a variable text when it should be a number?</strong>
+            <code>describe</code> shows <code>str</code> types. Fix with <code>destring</code> or
+            <code>encode</code>.
+          </li>
+          <li>
+            <strong>Have you actually read the error?</strong>
+            It is short and it is usually literal. <code>variable x not found</code> means exactly
+            that, nothing more subtle.
+          </li>
+          <li>
+            <strong>Does your line match the official syntax?</strong>
+            <code>help <em>command</em></code> shows the syntax diagram and worked examples. Square
+            brackets in it mean optional.
+          </li>
+          <li>
+            <strong>Still stuck? Start clean.</strong>
+            <code>clear all</code>, then run your do-file from the top. Leftovers from earlier
+            commands cause problems that look impossible to diagnose.
+          </li>
+        </ol>
+
+        <div class="panel" style="margin-top: 2rem;">
+          <h3>If it is still broken</h3>
+          <p>
+            Ask for help with three things: the exact command you ran, the exact error message
+            including the <code>r(&hellip;)</code> code, and what you expected to happen. That
+            turns a twenty-minute conversation into a two-minute one.
+          </p>
+          <p class="muted">
+            Your tutor or lab demonstrator would rather answer a question in week two than read a
+            broken assignment in week ten.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Site footer (identical on every page) ============ -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <rect width="32" height="32" rx="8" fill="#122a47"></rect>
+            <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+            <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+            <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+          </svg>
+          <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+        </a>
+        <p>
+          A plain-English Stata reference for students taking introductory statistics. Free,
+          static, and open to anyone who needs it.
+        </p>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2>Sections</h2>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="commands.html">Command Dictionary</a></li>
+          <li><a href="guide.html">Beginner Guide</a></li>
+          <li><a href="help.html">Help Centre</a></li>
+          <li><a href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2>Good to know</h2>
+        <p>
+          Not affiliated with StataCorp or with any university. Stata is a registered trademark of
+          StataCorp LLC.
+        </p>
+        <p>
+          Where this site and your course materials disagree, your course materials win. Always
+          check the syntax for your own version of Stata with <code>help</code>.
+        </p>
+      </div>
+    </div>
+
+    <div class="container footer-base">
+      <p>&copy; <span data-year>2026</span> Stata-19 Toolkit. Built as a student project.</p>
+      <p>Made with plain HTML, CSS and JavaScript.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/help.js"></script>
+</body>
+</html>

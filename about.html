@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why I&rsquo;m Doing This &mdash; Stata-19 Toolkit</title>
+  <meta name="description" content="The mission behind the Stata-19 Toolkit: why beginner-friendly Stata help is hard to find, and what this site tries to do about it.">
+  <meta name="theme-color" content="#0b2447">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Applies the saved light/dark choice before the page paints, so there
+       is no flash of the wrong theme. Keep this in the <head> of every page. -->
+  <script>
+    (function () {
+      try {
+        var saved = window.localStorage.getItem("s19-theme");
+        if (saved === "dark" || saved === "light") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (error) {
+        /* Storage can be blocked; the system preference still applies. */
+      }
+    }());
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ Site header (identical on every page) ============ -->
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" rx="8" fill="#0b2447"></rect>
+          <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+          <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+          <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+        </svg>
+        <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="index.html">Home</a></li>
+          <li><a class="nav-link" href="commands.html">Command Dictionary</a></li>
+          <li><a class="nav-link" href="guide.html">Beginner Guide</a></li>
+          <li><a class="nav-link" href="help.html">Help Centre</a></li>
+          <li><a class="nav-link" href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <path d="M12 2.6v2.3M12 19.1v2.3M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.6 12h2.3M19.1 12h2.3M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8Z"></path>
+          </svg>
+        </button>
+
+        <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Page header ============ -->
+    <div class="page-head">
+      <div class="container">
+        <span class="eyebrow">Our story</span>
+        <h1>Why I&rsquo;m doing this</h1>
+        <p class="lede">
+          Every reference site is written by somebody, for a reason. This page is where the reason
+          goes: who built this, what it is trying to be, and what it deliberately is not.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============ Mission statement banner ============ -->
+    <section class="mission">
+      <div class="container container--narrow">
+        <p class="mission-eyebrow">The mission</p>
+        <p class="mission-statement">
+          To stop the software being the hard part of learning statistics &mdash; so that a
+          beginner opening Stata for the first time spends their effort on the thinking, not on
+          guessing what to type.
+        </p>
+        <p class="mission-note">
+          Free to use, written in plain English, and built for the week you feel furthest behind.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ My story ============ -->
+    <section class="section" id="story">
+      <div class="container container--narrow">
+        <div class="section-head">
+          <span class="eyebrow">My story</span>
+          <h2>How this site came about</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            I struggled with my Stata-19 coursework. Not briefly, and not in a way I could
+            shrug off: the work took far longer than it should have, and for a while I could not
+            tell whether I was finding it hard because the statistics was difficult or because I
+            could not make the software do anything.
+          </p>
+
+          <p>
+            What I remember is how much of that time went on things that were not statistics at
+            all &mdash; working out what to type, working out why it had not worked, and working
+            out whether the problem was my understanding or my spelling. None of that was the
+            part I was being assessed on, and all of it stood between me and the part I was.
+          </p>
+
+          <p>
+            What surprised me most was how little help there was. I went looking, more than once,
+            and kept finding the same thing: plenty of Stata material, almost none of it written
+            for somebody who had just opened the program for the first time.
+          </p>
+
+          <blockquote class="pullquote">
+            <p>
+              I did not need more Stata resources. I needed one that assumed I was starting from
+              nothing.
+            </p>
+          </blockquote>
+
+          <p>
+            So I built the thing I had been looking for. A dictionary of commands you can search
+            by what you are trying to do rather than by a name you have not met yet, so that
+            typing &ldquo;average&rdquo; finds the command instead of returning nothing. A
+            beginner guide that starts at opening Stata and ends with a finished analysis,
+            written to build confidence rather than to prove anything. And a help centre for the
+            moments when something breaks and you just need to know, quickly, what the message
+            means.
+          </p>
+
+          <p>
+            I wanted it to look like a professional reference rather than a student project,
+            because that is the kind of site I would have trusted when I was the one who was
+            stuck. I built it with Claude Code, which meant I could spend my time deciding what
+            should be in it instead of learning to build a website from scratch.
+          </p>
+
+          <p>
+            It started as a way to make my own life simpler. If it makes yours simpler too, that
+            is the whole point of putting it online.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ The problem ============ -->
+    <section class="section section--surface" id="problem">
+      <div class="container container--narrow">
+        <div class="section-head">
+          <span class="eyebrow">The problem</span>
+          <h2>Beginner-friendly Stata help is surprisingly hard to find</h2>
+        </div>
+
+        <div class="prose">
+          <p>
+            There is no shortage of Stata material. There is a shortage of Stata material written
+            for somebody who has never opened it. Almost everything available assumes you are
+            already past the part that is actually stopping you.
+          </p>
+
+          <ul class="tick-list">
+            <li>
+              <strong>The official documentation is precise, not welcoming.</strong> It is written
+              as a reference for people who already know the vocabulary, so looking up
+              <code>summarize</code> when you are not sure what a variable list is tends to raise
+              more questions than it answers.
+            </li>
+            <li>
+              <strong>Forum answers assume the asker&rsquo;s context.</strong> A reply that solves
+              somebody else&rsquo;s problem in one line is very hard to adapt when you cannot yet
+              tell which part of it matters.
+            </li>
+            <li>
+              <strong>Textbooks teach the statistics, not the software.</strong> They will explain
+              what a t-test is for and leave the typing as an exercise, which is exactly backwards
+              if the typing is where you are stuck.
+            </li>
+            <li>
+              <strong>Videos move at the presenter&rsquo;s pace.</strong> They are good for
+              watching somebody work, and poor for the thing you usually need at eleven at night:
+              one specific answer, findable in seconds.
+            </li>
+            <li>
+              <strong>Error messages explain nothing to a newcomer.</strong>
+              <code>r(111)</code> and <code>varlist required</code> are perfectly clear once you
+              know what they mean, and completely opaque until then.
+            </li>
+          </ul>
+
+          <p>
+            None of that is anyone&rsquo;s fault. Documentation is written by experts, forums are
+            written for peers, and courses have a syllabus to get through. But the gap it leaves
+            is real, and the people standing in it are beginners who conclude, wrongly, that they
+            are the problem.
+          </p>
+
+          <p>
+            That was my own experience of looking: not that there was nothing out there, but that
+            everything I found assumed I was further along than I was.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ What this site aims to do ============ -->
+    <section class="section" id="aims">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">What this site aims to do</span>
+          <h2>Four things, done properly</h2>
+          <p class="lede">
+            Not a course, not a textbook and not a replacement for either. Four narrow jobs, aimed
+            at the gap described above.
+          </p>
+        </div>
+
+        <div class="card-grid card-grid--four">
+          <article class="card card--linked">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M4 6h10M4 11h16M4 16h7"></path>
+                <path d="M17.5 14.5 20 17l-2.5 2.5"></path>
+              </svg>
+            </div>
+            <h3>Plain-English explanations</h3>
+            <p>
+              Every command is described by the problem it solves before the syntax appears, so
+              you can find it by searching for what you want rather than for a word you have not
+              met yet.
+            </p>
+            <a class="card-link" href="commands.html">Open the dictionary</a>
+          </article>
+
+          <article class="card card--linked">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M12 3.6 14.6 9l5.9.8-4.3 4.1 1.1 5.8-5.3-2.8-5.3 2.8 1.1-5.8L3.5 9.8 9.4 9Z"></path>
+              </svg>
+            </div>
+            <h3>Confidence, not just answers</h3>
+            <p>
+              The guide teaches do-files from the first lesson, because knowing you can rerun
+              everything is what makes mistakes stop being frightening. Nothing you type can break
+              anything.
+            </p>
+            <a class="card-link" href="guide.html">Start the guide</a>
+          </article>
+
+          <article class="card card--linked">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="M16.5 16.5 21 21"></path>
+              </svg>
+            </div>
+            <h3>Quick answers when you are stuck</h3>
+            <p>
+              One search box over the errors, the questions and the glossary. Paste the code from
+              an error message, read what it means in a sentence, and get back to the actual
+              assignment.
+            </p>
+            <a class="card-link" href="help.html">Open the Help Centre</a>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M12 3.2 20.2 7v5.4c0 4.3-3.3 7.3-8.2 8.4-4.9-1.1-8.2-4.1-8.2-8.4V7Z"></path>
+                <path d="m9 12 2.2 2.2L15.5 10"></path>
+              </svg>
+            </div>
+            <h3>Honest about its limits</h3>
+            <p>
+              This site teaches the software. It does not tell you which analysis your question
+              needs, and where it disagrees with your course materials, your course materials are
+              right. It is also free, with no account and no tracking.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Closing call to action ============ -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="cta">
+          <span class="eyebrow" style="color: var(--accent);">Where to start</span>
+          <h2>Seven lessons, from opening Stata to explaining your results</h2>
+          <p>
+            If you are at the beginning, start at the beginning. The guide assumes nothing, uses a
+            dataset already inside Stata, and keeps your place as you go.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-accent" href="guide.html">Start the Beginner Guide</a>
+            <a class="btn btn-ghost" href="commands.html">Look up a command instead</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Site footer (identical on every page) ============ -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <rect width="32" height="32" rx="8" fill="#122a47"></rect>
+            <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+            <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+            <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+          </svg>
+          <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+        </a>
+        <p>
+          A plain-English Stata reference for students taking introductory statistics. Free,
+          static, and open to anyone who needs it.
+        </p>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2>Sections</h2>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="commands.html">Command Dictionary</a></li>
+          <li><a href="guide.html">Beginner Guide</a></li>
+          <li><a href="help.html">Help Centre</a></li>
+          <li><a href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2>Good to know</h2>
+        <p>
+          Not affiliated with StataCorp or with any university. Stata is a registered trademark of
+          StataCorp LLC.
+        </p>
+        <p>
+          Where this site and your course materials disagree, your course materials win. Always
+          check the syntax for your own version of Stata with <code>help</code>.
+        </p>
+      </div>
+    </div>
+
+    <div class="container footer-base">
+      <p>&copy; <span data-year>2026</span> Stata-19 Toolkit. Built as a student project.</p>
+      <p>Made with plain HTML, CSS and JavaScript.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

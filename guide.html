@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beginner Guide &mdash; Stata-19 Toolkit</title>
+  <meta name="description" content="A seven-lesson course for complete beginners: open Stata, write a do-file, load data, summarise it, draw a graph, run a t-test, and say what the output means in plain English.">
+  <meta name="theme-color" content="#0b2447">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Applies the saved light/dark choice before the page paints, so there
+       is no flash of the wrong theme. Keep this in the <head> of every page. -->
+  <script>
+    (function () {
+      try {
+        var saved = window.localStorage.getItem("s19-theme");
+        if (saved === "dark" || saved === "light") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (error) {
+        /* Storage can be blocked; the system preference still applies. */
+      }
+    }());
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ Site header (identical on every page) ============ -->
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" rx="8" fill="#0b2447"></rect>
+          <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+          <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+          <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+        </svg>
+        <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="index.html">Home</a></li>
+          <li><a class="nav-link" href="commands.html">Command Dictionary</a></li>
+          <li><a class="nav-link" href="guide.html">Beginner Guide</a></li>
+          <li><a class="nav-link" href="help.html">Help Centre</a></li>
+          <li><a class="nav-link" href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <path d="M12 2.6v2.3M12 19.1v2.3M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.6 12h2.3M19.1 12h2.3M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8Z"></path>
+          </svg>
+        </button>
+
+        <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Page header ============ -->
+    <div class="page-head">
+      <div class="container">
+        <span class="eyebrow">A course for complete beginners</span>
+        <h1>Beginner Guide</h1>
+        <p class="lede">
+          Seven short lessons that take you from never having opened Stata to running a real
+          analysis and explaining what it means. No prior statistics or programming needed, and
+          every example uses a dataset that is already inside Stata, so you can follow along from
+          the very first line.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============ Progress bar ============ -->
+    <div class="progress-wrap" id="progress-wrap">
+      <div class="container progress-inner">
+        <p class="progress-text">
+          <strong id="progress-count">Lesson progress</strong>
+          <span class="muted" id="progress-note">Tick lessons off as you go &mdash; this browser remembers.</span>
+        </p>
+
+        <div class="progress-track" id="progress-track" role="progressbar"
+             aria-valuemin="0" aria-valuemax="7" aria-valuenow="0"
+             aria-label="Lessons completed">
+          <span class="progress-fill" id="progress-fill"></span>
+        </div>
+
+        <button class="btn-reset" id="progress-reset" type="button" hidden>Start again</button>
+      </div>
+    </div>
+
+    <!-- ============ How the course works ============ -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="split">
+          <div>
+            <span class="eyebrow">Before you start</span>
+            <h2>You are not behind, and you are not bad at this</h2>
+            <p>
+              Stata looks unwelcoming the first time: a blinking cursor, no obvious buttons, and
+              error messages written for people who already know what they mean. That is a problem
+              with the software's manners, not with you.
+            </p>
+            <p>
+              Work through the lessons in order with Stata open beside this page. Each one takes
+              about five minutes, ends with a question so you can check it landed, and has a
+              button to tick it off. Nothing you type can break anything.
+            </p>
+            <ul class="tick-list">
+              <li>Every example runs on <code>auto</code>, a small dataset of 1978 cars that ships inside Stata.</li>
+              <li>Command names link to the <a href="commands.html">Command Dictionary</a> if you want more detail.</li>
+              <li>Use the copy button on each code block. Typos cause most beginner errors.</li>
+            </ul>
+          </div>
+
+          <aside class="panel">
+            <div class="panel-head">
+              <span class="panel-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+              <h3>Why we use do-files from Lesson 1</h3>
+            </div>
+            <p>
+              Stata gives you a Command window where you can type one line at a time. It works,
+              and almost every beginner starts there. We are going to skip it, and here is why.
+            </p>
+            <p>
+              A <strong>do-file</strong> is just a text file with your commands in it, in order.
+              Typing into the Command window is like doing your working on a napkin; a do-file is
+              doing it in your exercise book.
+            </p>
+            <ul class="tick-list">
+              <li><strong>You can run it again.</strong> Found a mistake in step two? Fix that line and rerun everything in one click.</li>
+              <li><strong>You can hand it in.</strong> Many courses ask for the do-file as well as the answers.</li>
+              <li><strong>It is your memory.</strong> In week nine, the file tells you exactly what you did in week two.</li>
+              <li><strong>Mistakes stop being scary.</strong> Your raw data is never touched, so the worst case is running the file again.</li>
+            </ul>
+            <p class="muted">
+              The Command window still has one good use: trying a single line you are unsure
+              about. Once it works, paste it into your do-file.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ The lessons ============ -->
+    <section class="section section--tight">
+      <div class="container with-aside">
+        <!-- Contents -->
+        <aside class="toc toc--offset">
+          <h2>The seven lessons</h2>
+          <ol class="toc-lessons">
+            <li data-toc="1"><a href="#lesson-1">Open Stata and write a do-file</a></li>
+            <li data-toc="2"><a href="#lesson-2">Load a dataset</a></li>
+            <li data-toc="3"><a href="#lesson-3">Look at your data</a></li>
+            <li data-toc="4"><a href="#lesson-4">Summary statistics</a></li>
+            <li data-toc="5"><a href="#lesson-5">Your first graph</a></li>
+            <li data-toc="6"><a href="#lesson-6">A simple hypothesis test</a></li>
+            <li data-toc="7"><a href="#lesson-7">Say what it means</a></li>
+          </ol>
+          <p class="muted toc-note">About 35 minutes in total. Stop whenever you like; your ticks are saved.</p>
+        </aside>
+
+        <div class="lessons">
+
+          <!-- ============================================ Lesson 1 ====== -->
+          <article class="lesson" id="lesson-1" data-lesson="1">
+            <header class="lesson-head">
+              <p class="lesson-number">Lesson 1</p>
+              <h2>Open Stata and write your first do-file</h2>
+              <p class="lesson-goal">
+                <strong>Goal:</strong> open Stata, work out what the windows are for, and save two
+                working lines of code in a file you can run again tomorrow.
+              </p>
+            </header>
+
+            <h3 class="lesson-label">Steps</h3>
+            <ol class="lesson-steps">
+              <li>
+                <strong>Open Stata.</strong> On a lab machine or university virtual desktop it will
+                be in the applications list. Use that version if you have one &mdash; it is the one
+                your coursework was written for.
+              </li>
+              <li>
+                <strong>Find the four windows.</strong> The screen is busy, but it is only four
+                panels, each with one job.
+                <dl class="win">
+                  <dt>Command</dt>
+                  <dd>The single line where you can type one command at a time. We will barely use it.</dd>
+                  <dt>Results</dt>
+                  <dd>The big panel where output appears. It scrolls, so nothing is ever lost &mdash; scroll up.</dd>
+                  <dt>Variables</dt>
+                  <dd>A list of the columns in whatever data you have loaded. Empty until Lesson 2.</dd>
+                  <dt>History (or Review)</dt>
+                  <dd>Every command you have run this session. Click one to put it back in the Command box.</dd>
+                </dl>
+              </li>
+              <li>
+                <strong>Open the Do-file Editor.</strong> Use the menu
+                (<strong>Window &rarr; Do-file Editor &rarr; New Do-file</strong>) or type
+                <a href="commands.html?q=doedit"><code>doedit</code></a> in the Command window and
+                press <kbd>Enter</kbd>. A blank text window opens. This is where you will work from
+                now on.
+              </li>
+              <li>
+                <strong>Type the four lines below</strong> into the editor. Lines starting with
+                <code>*</code> are notes to yourself; Stata ignores them completely.
+              </li>
+              <li>
+                <strong>Save it</strong> as <code>lesson1.do</code> in whatever folder you are
+                keeping this course in.
+              </li>
+              <li>
+                <strong>Run it.</strong> Press the <strong>Execute</strong> button in the editor's
+                toolbar (on Windows, <kbd>Ctrl</kbd>&nbsp;+&nbsp;<kbd>D</kbd>; on a Mac,
+                <kbd>Cmd</kbd>&nbsp;+&nbsp;<kbd>Shift</kbd>&nbsp;+&nbsp;<kbd>D</kbd>).
+              </li>
+            </ol>
+
+            <h3 class="lesson-label">The code</h3>
+            <pre class="code"><code><span class="cmt">* lesson1.do</span>
+<span class="cmt">* My first Stata do-file</span>
+
+sysuse auto, clear
+summarize price</code></pre>
+
+            <div class="see">
+              <h3 class="lesson-label">What you should see</h3>
+              <p>
+                The Results window echoes each command back to you with a dot in front of it, then
+                prints this table:
+              </p>
+              <pre class="out">    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |         74    6165.257    2949.496       3291      15906</pre>
+              <p>
+                The Variables window on the left has also filled up with names like
+                <code>make</code>, <code>price</code> and <code>mpg</code>. That is your data.
+              </p>
+              <p class="muted">
+                Nothing appeared? Check you pressed Execute rather than just saving, and that the
+                editor window was the active one.
+              </p>
+            </div>
+
+            <div class="quiz" data-quiz="1">
+              <h3 class="lesson-label">Check your understanding</h3>
+              <p class="quiz-q">
+                Your friend says they will just type their commands into the Command window
+                instead. Give them one reason to use a do-file.
+              </p>
+              <button class="btn btn-quiet reveal" type="button" aria-expanded="false" aria-controls="answer-1">
+                Show the answer
+              </button>
+              <div class="quiz-a" id="answer-1">
+                <p>
+                  Any of these counts: you can run the whole analysis again after fixing one line;
+                  you can hand the file in; you can read it in two months and know what you did;
+                  and if you break your data you simply run the file again from the top. Typing in
+                  the Command window leaves no record once Stata closes.
+                </p>
+              </div>
+            </div>
+
+            <footer class="lesson-foot">
+              <button class="btn btn-primary mark-complete" type="button" data-complete="1" aria-pressed="false">
+                Mark as complete
+              </button>
+            </footer>
+          </article>
+
+          <!-- ============================================ Lesson 2 ====== -->
+          <article class="lesson" id="lesson-2" data-lesson="2">
+            <header class="lesson-head">
+              <p class="lesson-number">Lesson 2</p>
+              <h2>Load a dataset</h2>
+              <p class="lesson-goal">
+                <strong>Goal:</strong> get data into Stata and be sure it arrived &mdash; both the
+                practice dataset we use here and, later, a file of your own.
+              </p>
+            </header>
+
+            <h3 class="lesson-label">Steps</h3>
+            <ol class="lesson-steps">
+              <li>
+                <strong>Start a new do-file</strong> for this lesson and save it as
+                <code>lesson2.do</code>. One file per lesson keeps things tidy.
+              </li>
+              <li>
+                <strong>Begin with <a href="commands.html?q=clear"><code>clear all</code></a>.</strong>
+                It empties anything left over from last time, so today's results cannot be
+                contaminated by yesterday's data.
+              </li>
+              <li>
+                <strong>Load the practice data</strong> with
+                <a href="commands.html?q=sysuse"><code>sysuse</code></a>. The <code>clear</code>
+                on the end tells Stata it may throw away whatever was already in memory.
+              </li>
+              <li>
+                <strong>Check it arrived.</strong> <code>count</code> tells you how many rows you
+                have. If this prints 74, the data is in.
+              </li>
+              <li>
+                <strong>When you come to use your own data</strong>, only one line changes. The
+                last three lines of the code are commented out with <code>*</code>; delete the star
+                from whichever one matches your file.
+              </li>
+            </ol>
+
+            <h3 class="lesson-label">The code</h3>
+            <pre class="code"><code><span class="cmt">* lesson2.do</span>
+
+clear all
+sysuse auto, clear
+count
+
+<span class="cmt">* --- For your own data later on ---</span>
+<span class="cmt">* cd "C:/Users/you/Documents/stata19"</span>
+<span class="cmt">* use "mydata.dta", clear</span>
+<span class="cmt">* import delimited "mydata.csv", varnames(1) clear</span></code></pre>
+
+            <div class="see">
+              <h3 class="lesson-label">What you should see</h3>
+              <pre class="out">. sysuse auto, clear
+(1978 automobile data)
+
+. count
+  74</pre>
+              <p>
+                Seventy-four cars. The note in brackets is just the dataset's own label, and the
+                Variables window now lists twelve variables.
+              </p>
+              <p class="muted">
+                Got <code>no; dataset in memory has changed since last saved</code>? You left off
+                the <code>clear</code>. Stata is protecting unsaved work rather than telling you
+                off.
+              </p>
+            </div>
+
+            <div class="quiz" data-quiz="2">
+              <h3 class="lesson-label">Check your understanding</h3>
+              <p class="quiz-q">
+                You run <code>use "mydata.dta", clear</code> and Stata says the file is not found,
+                but you can see the file sitting on your desktop. What is most likely wrong?
+              </p>
+              <button class="btn btn-quiet reveal" type="button" aria-expanded="false" aria-controls="answer-2">
+                Show the answer
+              </button>
+              <div class="quiz-a" id="answer-2">
+                <p>
+                  Stata is looking in a different folder. It has one &ldquo;working folder&rdquo;
+                  and only looks there unless you give a full path. Run
+                  <a href="commands.html?q=pwd"><code>pwd</code></a> to see where it is looking,
+                  then <a href="commands.html?q=cd"><code>cd</code></a> into the right folder, or
+                  write the whole path in quotation marks. This is the single most common
+                  &ldquo;file not found&rdquo; cause, and it is never a missing file.
+                </p>
+              </div>
+            </div>
+
+            <footer class="lesson-foot">
+              <button class="btn btn-primary mark-complete" type="button" data-complete="2" aria-pressed="false">
+                Mark as complete
+              </button>
+            </footer>
+          </article>
+
+          <!-- ============================================ Lesson 3 ====== -->
+          <article class="lesson" id="lesson-3" data-lesson="3">
+            <header class="lesson-head">
+              <p class="lesson-number">Lesson 3</p>
+              <h2>Look at your data before you analyse it</h2>
+              <p class="lesson-goal">
+                <strong>Goal:</strong> find out what is actually in the dataset &mdash; which
+                variables, what type they are, and where the gaps are &mdash; before you calculate
+                anything.
+              </p>
+            </header>
+
+            <h3 class="lesson-label">Steps</h3>
+            <ol class="lesson-steps">
+              <li>
+                <strong>Run <a href="commands.html?q=describe"><code>describe</code></a> first.</strong>
+                It lists every variable with its type. The type matters: a variable stored as
+                <code>str</code> is text, and statistical commands will refuse it.
+              </li>
+              <li>
+                <strong>Look at the actual rows</strong> with
+                <a href="commands.html?q=list"><code>list</code></a>. Always add <code>in 1/10</code>
+                or you will print all 74 rows &mdash; and in real data, thousands.
+              </li>
+              <li>
+                <strong>Check for gaps</strong> with
+                <a href="commands.html?q=misstable"><code>misstable summarize</code></a>. Missing
+                values in Stata show as a full stop, and they quietly shrink your sample later.
+              </li>
+              <li>
+                <strong>Get to know one variable properly</strong> with
+                <a href="commands.html?q=codebook"><code>codebook</code></a>, which reports its
+                range, how many values are missing, and how many distinct values it takes.
+              </li>
+              <li>
+                <strong>Optional but pleasant:</strong> type
+                <a href="commands.html?q=browse"><code>browse</code></a> in the Command window to
+                see the data as a spreadsheet. Close that window before running anything else.
+              </li>
+            </ol>
+
+            <h3 class="lesson-label">The code</h3>
+            <pre class="code"><code><span class="cmt">* lesson3.do</span>
+
+clear all
+sysuse auto, clear
+
+describe
+list make price mpg in 1/10
+misstable summarize
+codebook rep78</code></pre>
+
+            <div class="see">
+              <h3 class="lesson-label">What you should see</h3>
+              <p>
+                <code>describe</code> reports <strong>74 observations</strong> and
+                <strong>12 variables</strong>, and tells you that <code>make</code> is
+                <code>str18</code> &mdash; text &mdash; while the rest are numbers.
+              </p>
+              <p>
+                <code>misstable summarize</code> prints a short table naming only the variables
+                with gaps. In <code>auto</code> there is exactly one:
+              </p>
+              <pre class="out">                                                 Obs&lt;.
+                                  +------------------------------
+                                  |  Unique
+         Variable     Obs=.   Obs&gt;.   Obs&lt;.   values        Min         Max
+   -----------------+-----------------------------------------------------
+            rep78        5              69        5          1           5</pre>
+              <p>
+                Five cars have no repair record. That is not an error and you do not need to fix
+                it &mdash; but it explains why <code>rep78</code> will show 69 observations later
+                while everything else shows 74.
+              </p>
+            </div>
+
+            <div class="quiz" data-quiz="3">
+              <h3 class="lesson-label">Check your understanding</h3>
+              <p class="quiz-q">
+                <code>describe</code> says 74 observations, but when you summarise
+                <code>rep78</code> the Obs column says 69. Have you lost five cars?
+              </p>
+              <button class="btn btn-quiet reveal" type="button" aria-expanded="false" aria-controls="answer-3">
+                Show the answer
+              </button>
+              <div class="quiz-a" id="answer-3">
+                <p>
+                  No. All 74 cars are still there; five of them simply have no value recorded for
+                  that one variable. Stata skips missing values rather than guessing, so any
+                  statistic about <code>rep78</code> is based on the 69 cars that have one. Always
+                  read the Obs column &mdash; it is how you notice this.
+                </p>
+              </div>
+            </div>
+
+            <footer class="lesson-foot">
+              <button class="btn btn-primary mark-complete" type="button" data-complete="3" aria-pressed="false">
+                Mark as complete
+              </button>
+            </footer>
+          </article>
+
+          <!-- ============================================ Lesson 4 ====== -->
+          <article class="lesson" id="lesson-4" data-lesson="4">
+            <header class="lesson-head">
+              <p class="lesson-number">Lesson 4</p>
+              <h2>Calculate summary statistics</h2>
+              <p class="lesson-goal">
+                <strong>Goal:</strong> produce the numbers that describe your variables, and know
+                what every column of the output means.
+              </p>
+            </header>
+
+            <h3 class="lesson-label">Steps</h3>
+            <ol class="lesson-steps">
+              <li>
+                <strong>Start with
+                <a href="commands.html?q=summarize"><code>summarize</code></a></strong>, the
+                command you will use more than any other. It gives you the count, the mean
+                (the average), the standard deviation (how spread out the values are) and the
+                smallest and largest values.
+              </li>
+              <li>
+                <strong>Add <code>, detail</code></strong> when you want the median and the
+                percentiles. The plain version does not show the median, which surprises everyone
+                once.
+              </li>
+              <li>
+                <strong>Count categories with
+                <a href="commands.html?q=tabulate"><code>tabulate</code></a></strong>. Use this for
+                variables with a handful of values, such as <code>foreign</code>, rather than
+                <code>summarize</code>.
+              </li>
+              <li>
+                <strong>Compare groups</strong> by putting
+                <a href="commands.html?q=bysort"><code>bysort</code></a> in front of a command. It
+                runs that command once for each group &mdash; the single most useful idea in
+                Stata.
+              </li>
+            </ol>
+
+            <h3 class="lesson-label">The code</h3>
+            <pre class="code"><code><span class="cmt">* lesson4.do</span>
+
+clear all
+sysuse auto, clear
+
+summarize price mpg
+summarize price, detail
+tabulate foreign
+bysort foreign: summarize price</code></pre>
+
+            <div class="see">
+              <h3 class="lesson-label">What you should see</h3>
+              <pre class="out">    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+       price |         74    6165.257    2949.496       3291      15906
+         mpg |         74     21.2973    5.785503         12         41</pre>
+              <p>Reading that across:</p>
+              <ul class="tick-list">
+                <li><strong>Obs</strong> &mdash; how many cars had a value. 74 means none are missing.</li>
+                <li><strong>Mean</strong> &mdash; the average price, about $6,165.</li>
+                <li><strong>Std. dev.</strong> &mdash; roughly how far a typical car sits from that average.</li>
+                <li><strong>Min</strong> and <strong>Max</strong> &mdash; the cheapest and dearest cars, and your best early warning of a typo in the data.</li>
+              </ul>
+              <p>
+                <code>summarize price, detail</code> adds the median, which comes out around
+                $5,000 &mdash; noticeably below the mean. <code>tabulate foreign</code> shows 52
+                domestic cars and 22 foreign ones.
+              </p>
+            </div>
+
+            <div class="quiz" data-quiz="4">
+              <h3 class="lesson-label">Check your understanding</h3>
+              <p class="quiz-q">
+                The mean price is about $6,165 but the median is about $5,000. What does that gap
+                tell you about the cars, and which number would you report?
+              </p>
+              <button class="btn btn-quiet reveal" type="button" aria-expanded="false" aria-controls="answer-4">
+                Show the answer
+              </button>
+              <div class="quiz-a" id="answer-4">
+                <p>
+                  A mean well above the median means the expensive cars are stretching the top
+                  end: most cars are cheap, a few are very dear. Statisticians call that
+                  right-skewed, which only means the long tail is on the right.
+                </p>
+                <p>
+                  For a typical price, the median is the more honest summary. Reporting both, and
+                  saying why they differ, is better still.
+                </p>
+              </div>
+            </div>
+
+            <footer class="lesson-foot">
+              <button class="btn btn-primary mark-complete" type="button" data-complete="4" aria-pressed="false">
+                Mark as complete
+              </button>
+            </footer>
+          </article>
+
+          <!-- ============================================ Lesson 5 ====== -->
+          <article class="lesson" id="lesson-5" data-lesson="5">
+            <header class="lesson-head">
+              <p class="lesson-number">Lesson 5</p>
+              <h2>Make your first graph</h2>
+              <p class="lesson-goal">
+                <strong>Goal:</strong> draw a histogram and a scatterplot, and save one as an image
+                file you could put in a report.
+              </p>
+            </header>
+
+            <h3 class="lesson-label">Steps</h3>
+            <ol class="lesson-steps">
+              <li>
+                <strong>Draw a
+                <a href="commands.html?q=histogram"><code>histogram</code></a></strong> of one
+                variable to see the shape of its distribution. <code>frequency</code> makes the
+                height a simple count, which is easier to explain than the default.
+              </li>
+              <li>
+                <strong>Save it straight away</strong> with
+                <a href="commands.html?q=graph+export"><code>graph export</code></a>. Each new
+                graph replaces the last one on screen, so export before you draw the next.
+              </li>
+              <li>
+                <strong>Plot two variables together</strong> with
+                <a href="commands.html?q=scatter"><code>scatter</code></a>. The vertical axis
+                variable comes first, which is the opposite way round from how most people say it
+                aloud.
+              </li>
+              <li>
+                <strong>Add a line of best fit</strong> by layering
+                <a href="commands.html?q=twoway"><code>twoway</code></a> plots in brackets. The
+                <code>///</code> at the end of a line just means &ldquo;this command continues
+                below&rdquo;.
+              </li>
+            </ol>
+
+            <h3 class="lesson-label">The code</h3>
+            <pre class="code"><code><span class="cmt">* lesson5.do</span>
+
+clear all
+sysuse auto, clear
+
+histogram mpg, frequency normal title("How far these cars go on a gallon")
+graph export "lesson5_histogram.png", width(1200) replace
+
+twoway (scatter price mpg) (lfit price mpg), ///
+       title("Price against mileage") legend(off)
+graph export "lesson5_scatter.png", width(1200) replace</code></pre>
+
+            <div class="see">
+              <h3 class="lesson-label">What you should see</h3>
+              <p>
+                A Graph window opens with your histogram: a row of bars, most cars bunched between
+                roughly 15 and 25 miles per gallon, with a thin normal curve drawn over the top for
+                comparison. Then it is replaced by the scatterplot: 74 dots with a straight line
+                sloping downwards through them, because cars that do more miles per gallon tend to
+                be cheaper.
+              </p>
+              <p>
+                In the Results window you also get a quiet confirmation for each export:
+              </p>
+              <pre class="out">file lesson5_histogram.png saved as PNG format</pre>
+              <p class="muted">
+                Where did the file go? Into Stata's working folder. Run <code>pwd</code> to find
+                out where that is.
+              </p>
+            </div>
+
+            <div class="quiz" data-quiz="5">
+              <h3 class="lesson-label">Check your understanding</h3>
+              <p class="quiz-q">
+                You draw a histogram, then a scatterplot, and then run
+                <code>graph export "figure1.png", replace</code>. Which graph ends up in the file?
+              </p>
+              <button class="btn btn-quiet reveal" type="button" aria-expanded="false" aria-controls="answer-5">
+                Show the answer
+              </button>
+              <div class="quiz-a" id="answer-5">
+                <p>
+                  The scatterplot. <code>graph export</code> saves whatever is in the Graph window
+                  right now, and each new graph command replaces what was there. Export each graph
+                  immediately after you draw it &mdash; which is exactly why the code above has an
+                  export line after every plot.
+                </p>
+              </div>
+            </div>
+
+            <footer class="lesson-foot">
+              <button class="btn btn-primary mark-complete" type="button" data-complete="5" aria-pressed="false">
+                Mark as complete
+              </button>
+            </footer>
+          </article>
+
+          <!-- ============================================ Lesson 6 ====== -->
+          <article class="lesson" id="lesson-6" data-lesson="6">
+            <header class="lesson-head">
+              <p class="lesson-number">Lesson 6</p>
+              <h2>Run a simple hypothesis test</h2>
+              <p class="lesson-goal">
+                <strong>Goal:</strong> compare two groups with a t-test, and find the one number
+                everyone will ask you about.
+              </p>
+            </header>
+
+            <p>
+              A hypothesis test answers one narrow question: <em>could a difference this big have
+              turned up by chance, if there were really no difference at all?</em> That is all it
+              does. Here we ask whether foreign and domestic cars differ in price.
+            </p>
+
+            <h3 class="lesson-label">Steps</h3>
+            <ol class="lesson-steps">
+              <li>
+                <strong>Look at the groups first.</strong> <code>tabulate foreign</code> tells you
+                how many cars are in each, and <code>bysort</code> gives you the two averages.
+                Never run a test before you have seen the numbers it is testing.
+              </li>
+              <li>
+                <strong>Run the test</strong> with
+                <a href="commands.html?q=ttest"><code>ttest</code></a>. The variable you are
+                comparing comes first; <code>by(foreign)</code> says which variable splits the two
+                groups.
+              </li>
+              <li>
+                <strong>Find the p-value.</strong> Stata prints three at the bottom. The middle
+                one, labelled <code>Ha: diff != 0</code>, is the ordinary two-sided test and almost
+                certainly the one your course wants.
+              </li>
+              <li>
+                <strong>Compare it with 0.05</strong>, the threshold most courses use. Below it,
+                the difference is called statistically significant; above it, it is not.
+              </li>
+            </ol>
+
+            <h3 class="lesson-label">The code</h3>
+            <pre class="code"><code><span class="cmt">* lesson6.do</span>
+
+clear all
+sysuse auto, clear
+
+tabulate foreign
+bysort foreign: summarize price
+
+ttest price, by(foreign)</code></pre>
+
+            <div class="see">
+              <h3 class="lesson-label">What you should see</h3>
+              <p>
+                A table with one row per group, then the difference between them, and underneath
+                it three lines of p-values. The parts that matter:
+              </p>
+              <ul class="tick-list">
+                <li>The <strong>two group means</strong>: domestic cars average roughly $6,070 and foreign cars roughly $6,385.</li>
+                <li>The <strong>difference</strong> between them: a few hundred dollars.</li>
+                <li>The <strong>two-sided p-value</strong> on the <code>Ha: diff != 0</code> line: around 0.68.</li>
+              </ul>
+              <p>
+                0.68 is a long way above 0.05. In plain English: a price gap this small, in a
+                sample this size, is entirely unremarkable. We have not found evidence that the two
+                kinds of car differ in price.
+              </p>
+              <p class="muted">
+                This is a perfectly good result. &ldquo;No significant difference&rdquo; is an
+                answer, not a failed experiment &mdash; and it is far more common in real work than
+                coursework examples suggest.
+              </p>
+            </div>
+
+            <div class="quiz" data-quiz="6">
+              <h3 class="lesson-label">Check your understanding</h3>
+              <p class="quiz-q">
+                Your p-value is 0.68. Which of these can you write &mdash; &ldquo;foreign and
+                domestic cars cost the same&rdquo;, or &ldquo;we found no evidence that they
+                differ in price&rdquo;?
+              </p>
+              <button class="btn btn-quiet reveal" type="button" aria-expanded="false" aria-controls="answer-6">
+                Show the answer
+              </button>
+              <div class="quiz-a" id="answer-6">
+                <p>
+                  The second. A large p-value means your data is consistent with there being no
+                  difference &mdash; but it is also consistent with a real difference that this
+                  sample of 74 cars was too small to detect. Absence of evidence is not evidence of
+                  absence, and markers notice the difference between those two sentences.
+                </p>
+              </div>
+            </div>
+
+            <footer class="lesson-foot">
+              <button class="btn btn-primary mark-complete" type="button" data-complete="6" aria-pressed="false">
+                Mark as complete
+              </button>
+            </footer>
+          </article>
+
+          <!-- ============================================ Lesson 7 ====== -->
+          <article class="lesson" id="lesson-7" data-lesson="7">
+            <header class="lesson-head">
+              <p class="lesson-number">Lesson 7</p>
+              <h2>Say what the output means, in plain English</h2>
+              <p class="lesson-goal">
+                <strong>Goal:</strong> turn a screen of Stata numbers into two or three sentences
+                you could put in a report &mdash; which is what you are actually marked on.
+              </p>
+            </header>
+
+            <p>
+              Running the command is the easy half. The marks are in the sentence afterwards. Here
+              is a pattern that works for almost any result: <strong>what you did</strong>,
+              <strong>what you found</strong>, <strong>how sure you are</strong>, and
+              <strong>what it means for the question</strong>.
+            </p>
+
+            <h3 class="lesson-label">Steps</h3>
+            <ol class="lesson-steps">
+              <li>
+                <strong>Run one more analysis</strong> &mdash; a regression, which asks how one
+                variable moves with another. <a href="commands.html?q=regress"><code>regress</code></a>
+                takes the thing you are explaining first, then the thing doing the explaining.
+              </li>
+              <li>
+                <strong>Find three numbers:</strong> the coefficient on <code>mpg</code>, its
+                p-value in the <code>P&gt;|t|</code> column, and the R-squared at the top right.
+              </li>
+              <li>
+                <strong>Say what the coefficient means</strong> in the units of your data: one more
+                mile per gallon goes with a price lower by that many dollars.
+              </li>
+              <li>
+                <strong>Write the sentences</strong> using the four-part pattern. Keep the hedging
+                honest: <em>associated with</em>, not <em>causes</em>.
+              </li>
+            </ol>
+
+            <h3 class="lesson-label">The code</h3>
+            <pre class="code"><code><span class="cmt">* lesson7.do</span>
+
+clear all
+sysuse auto, clear
+
+summarize price mpg
+regress price mpg</code></pre>
+
+            <div class="see">
+              <h3 class="lesson-label">What you should see</h3>
+              <p>
+                A coefficient table. The <code>mpg</code> row shows a negative coefficient of
+                roughly &minus;239, its p-value is well under 0.05, and the R-squared near the top
+                right is about 0.22.
+              </p>
+              <p>Written out, that becomes:</p>
+              <div class="callout">
+                <p class="callout-title">A sentence you could hand in</p>
+                <p>
+                  &ldquo;Using the 74 cars in the <code>auto</code> dataset, we regressed price on
+                  fuel economy. Each additional mile per gallon is associated with a price lower by
+                  about $239 (p &lt; 0.05), and fuel economy alone explains around 22% of the
+                  variation in price.&rdquo;
+                </p>
+              </div>
+              <p>
+                Notice what that sentence does <em>not</em> say: that better fuel economy
+                <em>causes</em> lower prices. Cheaper cars are smaller and lighter, and lighter
+                cars use less fuel. The regression cannot tell those stories apart.
+              </p>
+            </div>
+
+            <div class="quiz" data-quiz="7">
+              <h3 class="lesson-label">Check your understanding</h3>
+              <p class="quiz-q">
+                A classmate writes: &ldquo;The regression proves that making a car more fuel
+                efficient reduces its price.&rdquo; What two words would you change, and why?
+              </p>
+              <button class="btn btn-quiet reveal" type="button" aria-expanded="false" aria-controls="answer-7">
+                Show the answer
+              </button>
+              <div class="quiz-a" id="answer-7">
+                <p>
+                  <strong>&ldquo;Proves&rdquo;</strong> and <strong>&ldquo;reduces&rdquo;</strong>.
+                  A regression on observational data shows an association, not proof and not cause.
+                  Something else &mdash; size and weight, here &mdash; plausibly drives both. Write
+                  &ldquo;is associated with a lower price&rdquo; and you are both accurate and
+                  unarguable.
+                </p>
+              </div>
+            </div>
+
+            <footer class="lesson-foot">
+              <button class="btn btn-primary mark-complete" type="button" data-complete="7" aria-pressed="false">
+                Mark as complete
+              </button>
+            </footer>
+          </article>
+
+          <!-- ============ After the course ============ -->
+          <div class="panel course-end" id="course-end">
+            <h3>Where to go next</h3>
+            <p>
+              You can now load data, inspect it, describe it, draw it, test it and explain it
+              &mdash; from a file you can rerun. That is the whole shape of an introductory
+              statistics assignment.
+            </p>
+            <p>
+              Keep the <a href="commands.html">Command Dictionary</a> open in a tab while you work;
+              it is built for looking things up mid-task. When something breaks, the
+              <a href="help.html">Help Centre</a> translates Stata's error messages. And inside
+              Stata, <a href="commands.html?q=help"><code>help</code></a> followed by a command name
+              is always the official answer for your version.
+            </p>
+            <p class="muted">
+              One last habit worth keeping: start every do-file with <code>clear all</code>, and
+              run it from the top before you hand anything in. If it runs clean from an empty
+              Stata, your results are real.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Site footer (identical on every page) ============ -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <rect width="32" height="32" rx="8" fill="#122a47"></rect>
+            <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+            <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+            <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+          </svg>
+          <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+        </a>
+        <p>
+          A plain-English Stata reference for students taking introductory statistics. Free,
+          static, and open to anyone who needs it.
+        </p>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2>Sections</h2>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="commands.html">Command Dictionary</a></li>
+          <li><a href="guide.html">Beginner Guide</a></li>
+          <li><a href="help.html">Help Centre</a></li>
+          <li><a href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2>Good to know</h2>
+        <p>
+          Not affiliated with StataCorp or with any university. Stata is a registered trademark of
+          StataCorp LLC.
+        </p>
+        <p>
+          Where this site and your course materials disagree, your course materials win. Always
+          check the syntax for your own version of Stata with <code>help</code>.
+        </p>
+      </div>
+    </div>
+
+    <div class="container footer-base">
+      <p>&copy; <span data-year>2026</span> Stata-19 Toolkit. Built as a student project.</p>
+      <p>Made with plain HTML, CSS and JavaScript.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/guide.js"></script>
+</body>
+</html>

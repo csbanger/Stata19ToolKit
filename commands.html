@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Command Dictionary &mdash; Stata-19 Toolkit</title>
+  <meta name="description" content="A searchable dictionary of the Stata commands used in introductory statistics, each with a plain-English description and a worked example you can copy.">
+  <meta name="theme-color" content="#0b2447">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Applies the saved light/dark choice before the page paints, so there
+       is no flash of the wrong theme. Keep this in the <head> of every page. -->
+  <script>
+    (function () {
+      try {
+        var saved = window.localStorage.getItem("s19-theme");
+        if (saved === "dark" || saved === "light") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (error) {
+        /* Storage can be blocked; the system preference still applies. */
+      }
+    }());
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ Site header (identical on every page) ============ -->
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <rect width="32" height="32" rx="8" fill="#0b2447"></rect>
+          <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+          <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+          <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+        </svg>
+        <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="index.html">Home</a></li>
+          <li><a class="nav-link" href="commands.html">Command Dictionary</a></li>
+          <li><a class="nav-link" href="guide.html">Beginner Guide</a></li>
+          <li><a class="nav-link" href="help.html">Help Centre</a></li>
+          <li><a class="nav-link" href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <path d="M12 2.6v2.3M12 19.1v2.3M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.6 12h2.3M19.1 12h2.3M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8Z"></path>
+          </svg>
+        </button>
+
+        <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-toggle-bars" aria-hidden="true"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Page header ============ -->
+    <div class="page-head">
+      <div class="container">
+        <span class="eyebrow">Reference</span>
+        <h1>Command Dictionary</h1>
+        <p class="lede">
+          Fifty-one commands in plain English. Start typing to filter &mdash; the search matches
+          the command name, its short form and the description, so &ldquo;average&rdquo; finds
+          <code>summarize</code>. Open a card for the syntax, the options, the common mistakes,
+          and a worked example that runs on Stata&rsquo;s built-in <code>auto</code> dataset.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============ Search and category filters ============ -->
+    <div class="toolbar">
+      <div class="container">
+        <div class="search-field">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+          </svg>
+          <label class="sr-only" for="cmd-search">Search commands</label>
+          <input
+            class="search-input"
+            id="cmd-search"
+            type="search"
+            autocomplete="off"
+            placeholder="Search a command or what you want to do, e.g. regress, average, missing">
+        </div>
+
+        <div class="toolbar-row">
+          <!-- The category buttons are built from the data in
+               js/commands-data.js, so a new category appears here by itself. -->
+          <div class="chips" id="cmd-chips"></div>
+
+          <div class="chips sort-group" id="cmd-sort">
+            <span class="chips-label">Sort</span>
+            <button class="chip" type="button" data-sort="category" aria-pressed="true">By category</button>
+            <button class="chip" type="button" data-sort="az" aria-pressed="false">A&ndash;Z</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Results ============ -->
+    <section class="section section--tight">
+      <div class="container">
+        <p class="result-count" id="cmd-count" role="status" aria-live="polite">Loading commands&hellip;</p>
+        <div class="cmd-list" id="cmd-list"></div>
+
+        <noscript>
+          <div class="empty-state">
+            <h2>This page needs JavaScript for the search box</h2>
+            <p>
+              The dictionary is built by a small script, so with JavaScript switched off the list
+              will stay empty. Everything else on this site works without it.
+            </p>
+          </div>
+        </noscript>
+      </div>
+    </section>
+
+    <!-- ============ How to read the entries ============ -->
+    <section class="section section--surface">
+      <div class="container">
+        <div class="split">
+          <div>
+            <span class="eyebrow">How to use this page</span>
+            <h2>Reading a Stata command</h2>
+            <p>
+              Stata commands follow the same shape nearly every time. Once you can see that shape,
+              an unfamiliar command stops being frightening and becomes a fill-in-the-blanks
+              exercise.
+            </p>
+            <pre class="code"><code>summarize price mpg, detail
+<span class="cmt">--------- ---------  ------</span>
+<span class="cmt">command   variables  options</span></code></pre>
+            <ul class="tick-list">
+              <li>The <strong>command</strong> comes first and is always one or two words.</li>
+              <li>The <strong>variables</strong> it should act on come next, separated by spaces.</li>
+              <li>Anything after the <strong>comma</strong> is an option that changes the behaviour.</li>
+              <li>An <code>if</code> condition, when you need one, goes before the comma.</li>
+            </ul>
+          </div>
+
+          <aside class="panel">
+            <h3>Three habits worth building</h3>
+            <p>
+              <strong>Copy, do not retype.</strong> Every example here starts with
+              <code>sysuse auto, clear</code>, so you can paste the whole block straight into
+              Stata and watch it run. Most beginner errors are typos, not misunderstandings.
+            </p>
+            <p>
+              <strong>Check the official syntax.</strong> Options differ between Stata versions.
+              <code>help summarize</code> shows the exact syntax your copy accepts.
+            </p>
+            <p>
+              <strong>Run one line at a time.</strong> If a block of four commands fails, you want
+              to know which one broke.
+            </p>
+            <p class="muted">
+              Stuck on an error rather than a command? The <a href="help.html">Help Centre</a>
+              translates Stata&rsquo;s error messages into English.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Site footer (identical on every page) ============ -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+            <rect width="32" height="32" rx="8" fill="#122a47"></rect>
+            <rect x="7" y="18" width="4" height="7" rx="1.5" fill="#c9a227"></rect>
+            <rect x="14" y="13" width="4" height="12" rx="1.5" fill="#e3bb44"></rect>
+            <rect x="21" y="7" width="4" height="18" rx="1.5" fill="#ffffff"></rect>
+          </svg>
+          <span class="brand-text"><strong>Stata-19</strong> <span>Toolkit</span></span>
+        </a>
+        <p>
+          A plain-English Stata reference for students taking introductory statistics. Free,
+          static, and open to anyone who needs it.
+        </p>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2>Sections</h2>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="commands.html">Command Dictionary</a></li>
+          <li><a href="guide.html">Beginner Guide</a></li>
+          <li><a href="help.html">Help Centre</a></li>
+          <li><a href="about.html">Why I&rsquo;m Doing This</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2>Good to know</h2>
+        <p>
+          Not affiliated with StataCorp or with any university. Stata is a registered trademark of
+          StataCorp LLC.
+        </p>
+        <p>
+          Where this site and your course materials disagree, your course materials win. Always
+          check the syntax for your own version of Stata with <code>help</code>.
+        </p>
+      </div>
+    </div>
+
+    <div class="container footer-base">
+      <p>&copy; <span data-year>2026</span> Stata-19 Toolkit. Built as a student project.</p>
+      <p>Made with plain HTML, CSS and JavaScript.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <!-- The content first, then the code that draws it. -->
+  <script src="js/commands-data.js"></script>
+  <script src="js/commands.js"></script>
+</body>
+</html>
