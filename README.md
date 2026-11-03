@@ -7,72 +7,75 @@ error messages.
 Plain HTML, CSS and JavaScript. No frameworks, no build step and no dependencies; the only thing
 loaded from another server is the Inter webfont from Google Fonts.
 
+**Live at <https://csbanger.github.io/Stata19ToolKit/>**, served by GitHub Pages from the
+[csbanger/Stata19ToolKit](https://github.com/csbanger/Stata19ToolKit) repository.
+
 ## Viewing it on your own machine
 
 Double-click `index.html`. That is all — it opens in your browser and everything works, including
 the search box and the copy buttons.
 
-If you would rather serve it over `http://` (closer to how it behaves once published), run one of
+If you would rather serve it over `http://` (closer to how the live site behaves), run one of
 these in this folder and then open the address it prints:
 
 ```bash
 python -m http.server 8000
 ```
 
-## Putting it online, free
+## Updating the live site
 
-Two routes below. Both are free, neither needs the command line, and you can do both.
+GitHub Pages serves the `main` branch of `csbanger/Stata19ToolKit` from its root. Anything that
+reaches that branch is live about a minute later.
 
-One thing to know first: this folder sits inside a bigger repository that has unrelated files in
-it. So do **not** publish that repository. Publish this folder on its own, exactly as described.
+Worth knowing: **this folder is not that repository.** It sits inside a larger one with unrelated
+files in it, and the two are kept in step by hand. So a change made here is not live until you
+move it across by one of the routes below, and a change made on GitHub is not here until you copy
+it back.
 
-### Route 1 — GitHub Pages (a permanent address on your own account)
+### A typo or a one-line fix
 
-You need a free account at [github.com](https://github.com). Signing up takes a minute.
+Open the file in the repository, click the pencil icon, edit, then **Commit changes** at the
+bottom. Quick, but make the same edit in this folder too, or the next upload from here will quietly
+undo it.
 
-1. **Know what you are uploading.** The site is everything *inside* the `stata-19-guide` folder:
-   the five `.html` files, `README.md`, and the `css`, `js` and `assets` folders. `index.html`
-   has to end up at the top level of the repository, not nested inside another folder.
-2. **Create the repository.** On github.com click the **+** at the top right, then **New
-   repository**. Name it something like `stata-19-toolkit`. Leave it **Public**. Do not tick
-   "Add a README file". Click **Create repository**.
-3. **Upload the files.** On the empty repository page, click the
-   **uploading an existing file** link. Open the `stata-19-guide` folder on your computer, select
-   everything inside it (Ctrl+A), and drag it all onto the browser window. The `css`, `js` and
-   `assets` folders keep their structure. Wait until every file is listed, scroll down and click
-   **Commit changes**.
-4. **Switch Pages on.** In the repository, go to **Settings** (top row), then **Pages** in the
-   left sidebar. Under **Build and deployment**, set **Source** to *Deploy from a branch*,
-   **Branch** to `main` and the folder to `/ (root)`. Click **Save**.
-5. **Wait, then visit.** Give it a minute or two and reload that Settings → Pages page. It will
-   say *Your site is live at* `https://YOUR-USERNAME.github.io/stata-19-toolkit/`. That link is
-   yours to share.
+### Anything larger
 
-**If something looks wrong**
+Edit here, check it locally, then push from a clone of the published repository. If you have not
+cloned it yet, do that once, somewhere outside this folder:
 
-| What you see | What it means |
-| --- | --- |
-| 404 page | `index.html` is not at the top level — check the repository's file list. Or Pages is still building; wait a minute and reload. |
-| Page loads but looks unstyled | The `css` folder did not upload. Add file → Upload files, and drag it in again. |
-| An edit does not show up | Pages takes up to a minute, and your browser caches. Hard refresh with Ctrl+F5. |
+```bash
+git clone https://github.com/csbanger/Stata19ToolKit.git
+```
 
-**Changing the site later.** Click the file on GitHub, click the pencil icon, edit, then
-**Commit changes** at the bottom. The live site updates by itself within a minute. For bigger
-changes, **Add file → Upload files** and drop in the newer copies.
+Then, each time you have changes: copy the five `.html` files, `README.md`, and the `css`, `js` and
+`assets` folders over the clone's copies, and from inside the clone run
 
-### Route 2 — Netlify Drop (live in under a minute, no account to start)
+```bash
+git add -A
+git commit -m "Say what changed"
+git push
+```
 
-1. Go to [app.netlify.com/drop](https://app.netlify.com/drop).
-2. Drag the whole `stata-19-guide` folder onto the dashed box. (Here you drag the folder itself,
-   unlike GitHub where you upload its contents.)
-3. The site is live straight away at a random address such as
-   `https://sparkly-pie-1a2b3c.netlify.app`.
-4. To keep it, sign up free when prompted. Under **Site configuration → Change site name** you can
-   swap the random words for something like `stata-19-toolkit`.
+### Or upload through the browser
 
-Netlify Drop is the quickest way to see the site on a real URL and to send it to somebody today.
-GitHub Pages is the one to use for an address you will put on a CV, because the files live in a
-repository you control and can edit.
+**Add file → Upload files** in the repository, drag the changed files in, commit.
+
+One trap, because it has already happened once: dragging a selection that contains folders can
+flatten it, so `css/style.css` arrives as `style.css` at the root. The pages only ever ask for
+`css/` and `js/`, so the site then loads as unstyled text with no working search. Drag the `css`,
+`js` and `assets` folders themselves, and afterwards check the repository lists folders rather than
+loose `.css` and `.js` files.
+
+### Checking a change landed
+
+Reload the live page with **Ctrl+F5** — Pages updates within a minute but browsers cache hard. If
+it comes back unstyled, the `css` folder is missing or was flattened.
+
+### Showing someone a draft
+
+[Netlify Drop](https://app.netlify.com/drop) takes the whole folder dragged onto it and returns a
+live address in seconds, with no account needed to start. Useful for sharing a work-in-progress
+without touching the published site.
 
 ## What each file is
 
